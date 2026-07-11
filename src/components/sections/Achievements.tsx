@@ -48,11 +48,11 @@ function AnimatedMetric({ value, isHovered }: { value: string; isHovered: boolea
 
     const targetNum = parseInt(match[1], 10);
     const suffix = match[2];
-    
+
     let start = 0;
     const duration = 1000; // 1 second count-up
     const stepTime = Math.max(Math.floor(duration / targetNum), 20);
-    
+
     const timer = setInterval(() => {
       start += 1;
       setDisplayValue(`${start}${suffix}`);
@@ -135,7 +135,7 @@ function AchievementCard({ ach, index }: { ach: Achievement; index: number }) {
       <div className="flex flex-col gap-4 relative z-20">
         <div className="flex items-center justify-between">
           {/* Floating & Rotating Icon Box */}
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.25 }}
             variants={{
@@ -149,7 +149,7 @@ function AchievementCard({ ach, index }: { ach: Achievement; index: number }) {
 
         <div className="flex flex-col gap-0.5 mt-2">
           <AnimatedMetric value={ach.metric} isHovered={isHovered} />
-          
+
           <h3 className="text-xs font-space font-extrabold text-white tracking-wider uppercase mt-1">
             {ach.title}
           </h3>
@@ -295,7 +295,7 @@ export default function Achievements() {
           <span className="text-[10px] font-mono tracking-[0.4em] text-red-500/80 uppercase">
             Current Mindset
           </span>
-          
+
           <blockquote className="text-lg md:text-xl font-space font-medium text-slate-200 leading-relaxed italic select-none">
             &ldquo;I don&apos;t wait until I know everything. I build, learn, improve, and repeat.&rdquo;
           </blockquote>

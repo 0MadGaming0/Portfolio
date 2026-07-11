@@ -65,19 +65,17 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 flex justify-center px-4 ${
-          isScrolled ? "pt-4" : "pt-8"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 flex justify-center px-4 ${isScrolled ? "pt-4" : "pt-8"
+          }`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
       >
         <div
-          className={`w-full max-w-5xl flex items-center justify-between transition-all duration-500 rounded-full px-6 md:px-8 ${
-            isScrolled
-              ? "glass-panel h-14 shadow-lg shadow-[#080808]/50"
-              : "bg-transparent h-18"
-          }`}
+          className={`w-full max-w-5xl flex items-center justify-between transition-all duration-500 rounded-full px-6 md:px-8 ${isScrolled
+            ? "glass-panel h-14 shadow-lg shadow-[#080808]/50"
+            : "bg-transparent h-18"
+            }`}
         >
           {/* Logo / Brand Name */}
           <button
@@ -100,9 +98,8 @@ export default function Navbar() {
                 <button
                   key={item.href}
                   onClick={() => scrollToSection(item.href)}
-                  className={`relative text-xs tracking-wider font-medium px-4 py-2 rounded-full transition-colors duration-300 cursor-pointer ${
-                    isActive ? "text-white" : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`relative text-xs tracking-wider font-medium px-4 py-2 rounded-full transition-colors duration-300 cursor-pointer ${isActive ? "text-white" : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   {isActive && (
                     <motion.div
@@ -159,18 +156,17 @@ export default function Navbar() {
                     transition={{ delay: 0.1 * index, duration: 0.4 }}
                   >
                     <span
-                      className={`transition-colors duration-300 ${
-                        isActive
-                          ? "bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-500"
-                          : "text-slate-400 hover:text-white"
-                      }`}
+                      className={`transition-colors duration-300 ${isActive
+                        ? "bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-500"
+                        : "text-slate-400 hover:text-white"
+                        }`}
                     >
                       {item.label}
                     </span>
                   </motion.button>
                 );
               })}
-              
+
               <motion.button
                 onClick={() => scrollToSection("#contact")}
                 className="mt-8 py-3 rounded-full text-center border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 transition-colors duration-300 font-mono text-sm tracking-widest cursor-pointer"
