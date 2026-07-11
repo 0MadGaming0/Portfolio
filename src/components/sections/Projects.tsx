@@ -4,6 +4,36 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { PROJECTS, Project } from "@/lib/data";
 import { ExternalLink, X, HelpCircle, Code, Layers, FileText } from "lucide-react";
+import BuildCodeAIModal from "../ui/BuildCodeAIModal";
+import FitAIModal from "../ui/FitAIModal";
+import SkinScoutModal from "../ui/SkinScoutModal";
+
+const ProjectAmbientParticles = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    {[...Array(6)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute rounded-full bg-red-500/5 blur-[50px]"
+        style={{
+          width: Math.random() * 150 + 80,
+          height: Math.random() * 150 + 80,
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+        }}
+        animate={{
+          x: [0, Math.random() * 40 - 20, 0],
+          y: [0, Math.random() * 40 - 20, 0],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: Math.random() * 10 + 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+    ))}
+  </div>
+);
 
 // 3D Tilt Card component
 function TiltCard({ project, onClick }: { project: Project; onClick: () => void }) {
@@ -179,133 +209,198 @@ export default function Projects() {
       {/* Case Study Full-Screen Overlay Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-[#080808]/95 backdrop-blur-2xl overflow-y-auto px-4 py-8 md:p-12 flex justify-center items-start"
-          >
+          selectedProject.id === "future-placeholder" ? (
+            <BuildCodeAIModal onClose={() => setSelectedProject(null)} />
+          ) : selectedProject.id === "fitai" ? (
+            <FitAIModal onClose={() => setSelectedProject(null)} />
+          ) : selectedProject.id === "skin-disease" ? (
+            <SkinScoutModal onClose={() => setSelectedProject(null)} />
+          ) : (
             <motion.div
-              initial={{ y: 50, scale: 0.95 }}
-              animate={{ y: 0, scale: 1 }}
-              exit={{ y: 50, scale: 0.95 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="glass-panel-heavy w-full max-w-4xl rounded-3xl border border-violet-500/20 overflow-hidden shadow-2xl relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-[#080808]/95 backdrop-blur-2xl overflow-y-auto px-4 py-8 md:p-12 flex justify-center items-start"
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 p-2 rounded-full bg-slate-800/80 border border-slate-700/50 hover:bg-violet-600/30 hover:border-violet-500/50 hover:text-white text-slate-300 transition-colors duration-300 z-55 cursor-pointer"
-                aria-label="Close modal"
+              <motion.div
+                initial={{ y: 50, scale: 0.95 }}
+                animate={{ y: 0, scale: 1 }}
+                exit={{ y: 50, scale: 0.95 }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="glass-panel-heavy w-full max-w-4xl rounded-3xl border border-red-500/15 overflow-hidden shadow-2xl relative bg-[#09090b]/90"
               >
-                <X size={18} />
-              </button>
+                <ProjectAmbientParticles />
 
-              {/* Case Study Hero Header */}
-              <div className="p-8 md:p-12 bg-gradient-to-b from-violet-950/20 via-transparent to-transparent flex flex-col gap-4 border-b border-slate-800/50">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-[10px] font-mono tracking-widest bg-violet-600/30 border border-violet-500/40 text-violet-300 px-3 py-1 rounded-full">
-                    {selectedProject.category.toUpperCase()}
-                  </span>
-                  <span className="text-xs font-mono text-cyan-400">
-                    {selectedProject.tagline}
-                  </span>
-                </div>
-                
-                <h3 className="text-3xl md:text-5xl font-space font-extrabold text-white">
-                  {selectedProject.title}
-                </h3>
-                
-                <p className="text-sm text-slate-300 leading-relaxed font-light mt-2 max-w-2xl">
-                  {selectedProject.description}
-                </p>
+                {/* Close Button */}
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-6 right-6 p-2 rounded-full bg-slate-900 border border-slate-800 hover:bg-red-600/20 hover:border-red-500/40 hover:text-white text-slate-300 transition-colors duration-300 z-55 cursor-pointer shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+                  aria-label="Close modal"
+                >
+                  <X size={16} />
+                </button>
 
-                <div className="flex flex-wrap items-center gap-4 mt-6">
-                  {selectedProject.github !== "#" && (
-                    <a
-                      href={selectedProject.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 text-xs font-mono tracking-wider text-slate-300 hover:text-white transition-all duration-300 cursor-pointer"
-                    >
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub Repository
-                    </a>
-                  )}
-                  {selectedProject.live !== "#" && (
-                    <a
-                      href={selectedProject.live}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-xs font-mono tracking-wider text-white font-bold transition-all duration-300 cursor-pointer"
-                    >
-                      <ExternalLink size={14} /> Launch Live Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Case Study Details Grid */}
-              <div className="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                {/* Main Content Area */}
-                <div className="lg:col-span-8 flex flex-col gap-8">
-                  {/* Section 1: Problem */}
-                  <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 text-cyan-400 font-space font-bold text-sm uppercase">
-                      <HelpCircle size={16} /> <span>The Problem</span>
+                {/* Staggered Modal Content Animation wrapper */}
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {/* Case Study Hero Header */}
+                  <motion.div 
+                    variants={{
+                      hidden: { opacity: 0, y: 15 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+                    }}
+                    className="p-8 md:p-12 bg-gradient-to-b from-red-950/10 via-transparent to-transparent flex flex-col gap-4 border-b border-slate-800/40 relative z-10"
+                  >
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="text-[10px] font-mono tracking-widest bg-red-600/20 border border-red-500/30 text-red-300 px-3 py-1 rounded-full animate-pulse-slow shadow-[0_0_10px_rgba(239,68,68,0.1)]">
+                        {selectedProject.category.toUpperCase()}
+                      </span>
+                      <span className="text-xs font-mono text-rose-400">
+                        {selectedProject.tagline}
+                      </span>
                     </div>
-                    <p className="text-xs md:text-sm text-slate-300 font-light leading-relaxed">
-                      {selectedProject.problem}
+                    
+                    <h3 className="text-3xl md:text-5xl font-bebas tracking-wide text-white">
+                      {selectedProject.title}
+                    </h3>
+                    
+                    <p className="text-sm text-slate-300 leading-relaxed font-light mt-2 max-w-2xl">
+                      {selectedProject.description}
                     </p>
-                  </div>
 
-                  {/* Section 2: Approach */}
-                  <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 text-cyan-400 font-space font-bold text-sm uppercase">
-                      <Code size={16} /> <span>My Approach & Architecture</span>
+                    <div className="flex flex-wrap items-center gap-4 mt-6">
+                      {selectedProject.github !== "#" && (
+                        <a
+                          href={selectedProject.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500/40 text-xs font-mono tracking-wider text-slate-300 hover:text-white transition-all duration-300 cursor-pointer shadow-[0_4px_15px_rgba(0,0,0,0.3)]"
+                        >
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> GitHub Repository
+                        </a>
+                      )}
+                      {selectedProject.live !== "#" && (
+                        <a
+                          href={selectedProject.live}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-xs font-mono tracking-wider text-white font-bold transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(220,38,38,0.15)] hover:shadow-[0_0_25px_rgba(220,38,38,0.35)]"
+                        >
+                          <ExternalLink size={14} /> {selectedProject.id === "fitai" ? "🚀 Launch FitAI" : "Launch Live Demo"}
+                        </a>
+                      )}
                     </div>
-                    <p className="text-xs md:text-sm text-slate-300 font-light leading-relaxed">
-                      {selectedProject.approach}
-                    </p>
-                  </div>
+                  </motion.div>
 
-                  {/* Section 3: Challenges */}
-                  <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 text-violet-400 font-space font-bold text-sm uppercase">
-                      <Layers size={16} /> <span>Challenges & Constraints</span>
+                  {/* Case Study Details Grid */}
+                  <motion.div 
+                    variants={{
+                      hidden: { opacity: 0, y: 15 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+                    }}
+                    className="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10"
+                  >
+                    
+                    {/* Main Content Area */}
+                    <div className="lg:col-span-8 flex flex-col gap-8">
+                      {/* Section 1: Problem */}
+                      <div className="flex flex-col gap-2.5">
+                        <div className="flex items-center gap-2 text-rose-500 font-space font-bold text-sm uppercase tracking-wide">
+                          <HelpCircle size={15} /> <span>The Problem</span>
+                        </div>
+                        <p className="text-xs md:text-sm text-slate-300 font-light leading-relaxed">
+                          {selectedProject.problem}
+                        </p>
+                      </div>
+
+                      {/* Animated Shimmer Divider */}
+                      <div className="h-[1px] bg-gradient-to-r from-transparent via-slate-800/80 to-transparent relative overflow-hidden my-2" />
+
+                      {/* Section 2: Solution */}
+                      <div className="flex flex-col gap-2.5">
+                        <div className="flex items-center gap-2 text-rose-500 font-space font-bold text-sm uppercase tracking-wide">
+                          <Code size={15} /> <span>My Solution</span>
+                        </div>
+                        
+                        <div className="text-xs md:text-sm text-slate-300 font-light leading-relaxed flex flex-col gap-2">
+                          {selectedProject.approach.split("\n").map((line, idx) => {
+                            if (line.trim().startsWith("•")) {
+                              return (
+                                <div key={idx} className="flex items-start gap-2.5 pl-2">
+                                  <span className="text-red-400 mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] animate-pulse" />
+                                  <span>{line.replace("•", "").trim()}</span>
+                                </div>
+                              );
+                            }
+                            return <p key={idx} className="text-slate-300">{line}</p>;
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Animated Shimmer Divider */}
+                      <div className="h-[1px] bg-gradient-to-r from-transparent via-slate-800/80 to-transparent relative overflow-hidden my-2" />
+
+                      {/* Section 3: Challenges */}
+                      <div className="flex flex-col gap-2.5">
+                        <div className="flex items-center gap-2 text-rose-500 font-space font-bold text-sm uppercase tracking-wide">
+                          <Layers size={15} /> <span>Challenges & Constraints</span>
+                        </div>
+                        
+                        <div className="text-xs md:text-sm text-slate-300 font-light leading-relaxed flex flex-col gap-2">
+                          {selectedProject.challenges.split("\n").map((line, idx) => {
+                            if (line.trim().startsWith("•")) {
+                              return (
+                                <div key={idx} className="flex items-start gap-2.5 pl-2">
+                                  <span className="text-red-400 mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] animate-pulse" />
+                                  <span>{line.replace("•", "").trim()}</span>
+                                </div>
+                              );
+                            }
+                            return <p key={idx} className="text-slate-300">{line}</p>;
+                          })}
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-xs md:text-sm text-slate-300 font-light leading-relaxed">
-                      {selectedProject.challenges}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Sidebar Details Area */}
-                <div className="lg:col-span-4 flex flex-col gap-6 lg:border-l lg:border-slate-800/60 lg:pl-8">
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[10px] font-mono text-slate-500 uppercase">TECH STACK</span>
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {selectedProject.techStack.map((tech) => (
-                        <span key={tech} className="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
-                          {tech}
-                        </span>
-                      ))}
+                    {/* Sidebar Details Area */}
+                    <div className="lg:col-span-4 flex flex-col gap-6 lg:border-l lg:border-slate-800/60 lg:pl-8">
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">TECH STACK</span>
+                        <div className="flex flex-wrap gap-1.5 mt-1">
+                          {selectedProject.techStack.map((tech) => (
+                            <motion.span 
+                              key={tech} 
+                              whileHover={{ scale: 1.08, y: -1, borderColor: "rgba(239,68,68,0.3)" }}
+                              className="text-[9px] font-mono px-2.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400 cursor-default select-none transition-colors duration-300 hover:text-red-300"
+                            >
+                              {tech}
+                            </motion.span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="h-[1px] bg-slate-850" />
+
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest flex items-center gap-1"><FileText size={10} /> KEY LEARNINGS</span>
+                        <p className="text-[11px] leading-relaxed text-slate-400 font-light italic">
+                          {selectedProject.lessons}
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="h-[1px] bg-slate-800/60" />
+                  </motion.div>
+                </motion.div>
 
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[10px] font-mono text-slate-500 uppercase flex items-center gap-1"><FileText size={10} /> KEY LESSONS</span>
-                    <p className="text-[11px] leading-relaxed text-slate-400 font-light italic">
-                      {selectedProject.lessons}
-                    </p>
-                  </div>
-                </div>
-
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          )
         )}
       </AnimatePresence>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring, useTransform, Variants } from "framer-motion";
 import { ACHIEVEMENTS, Achievement } from "@/lib/data";
 import { Code, Users, Compass, Sparkles } from "lucide-react";
 
@@ -19,6 +19,60 @@ const getAchievementIcon = (index: number) => {
       return <Code className="text-red-400" size={20} />;
   }
 };
+
+// Premium Character-by-Character sliding reveal component for headings
+function AnimatedTextReveal({ text, className }: { text: string; className: string }) {
+  const letters = Array.from(text);
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.03, delayChildren: 0.05 },
+    },
+  };
+
+  const child: Variants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 180,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 18,
+      transition: {
+        type: "spring",
+        damping: 15,
+        stiffness: 180,
+      },
+    },
+  };
+
+  return (
+    <motion.h2
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-40px" }}
+      className={className}
+      style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+    >
+      {letters.map((char, index) => (
+        <motion.span
+          variants={child}
+          key={index}
+          style={{ marginRight: char === " " ? "0.25em" : "0px" }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </motion.h2>
+  );
+}
 
 // Custom animated counter/spin selector
 function AnimatedMetric({ value, isHovered }: { value: string; isHovered: boolean }) {
@@ -48,11 +102,11 @@ function AnimatedMetric({ value, isHovered }: { value: string; isHovered: boolea
 
     const targetNum = parseInt(match[1], 10);
     const suffix = match[2];
-
+    
     let start = 0;
     const duration = 1000; // 1 second count-up
     const stepTime = Math.max(Math.floor(duration / targetNum), 20);
-
+    
     const timer = setInterval(() => {
       start += 1;
       setDisplayValue(`${start}${suffix}`);
@@ -85,19 +139,44 @@ function AnimatedMetric({ value, isHovered }: { value: string; isHovered: boolea
   );
 }
 
-// Single Achievement Card with custom Mouse Parallax Glow and Border Glow animations
+// Single Achievement Card with custom Mouse Parallax Glow and 3D Tilt rotations
 function AchievementCard({ ach, index }: { ach: Achievement; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
+  // Motion values for tilt positions
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  // Spring config for silky smooth tilting
+  const springConfig = { damping: 15, stiffness: 160, mass: 0.4 };
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), springConfig);
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), springConfig);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    // Normalize cursor position coordinates to relative (-0.5 to 0.5)
+    const relX = (e.clientX - rect.left) / width - 0.5;
+    const relY = (e.clientY - rect.top) / height - 0.5;
+    
+    x.set(relX);
+    y.set(relY);
+    
     setMousePos({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     });
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+    setIsHovered(false);
   };
 
   return (
@@ -105,15 +184,19 @@ function AchievementCard({ ach, index }: { ach: Achievement; index: number }) {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ type: "spring", stiffness: 60, damping: 12, delay: index * 0.12 }}
-      whileHover={{ y: -10, scale: 1.025 }}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
       className="glass-card p-7 rounded-3xl flex flex-col justify-between min-h-[260px] relative overflow-hidden group border border-violet-500/10 hover:border-transparent transition-all duration-500 cursor-default"
     >
-      {/* Animated gradient border on hover */}
+      {/* Animated gradient border container on hover */}
       <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-red-600 via-violet-650 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ padding: "1px" }}>
         <div className="absolute inset-0 bg-[#080808]/95 rounded-3xl" />
       </div>
@@ -127,15 +210,16 @@ function AchievementCard({ ach, index }: { ach: Achievement; index: number }) {
       />
 
       {/* Pulsing indicator dot in top-right corner */}
-      <div className="absolute top-4 right-4 flex h-2 w-2 z-20">
+      <div className="absolute top-4 right-4 flex h-2 w-2 z-20" style={{ transform: "translateZ(30px)" }}>
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
         <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
       </div>
 
-      <div className="flex flex-col gap-4 relative z-20">
+      {/* Floating 3D layers inside card */}
+      <div className="flex flex-col gap-4 relative z-20" style={{ transform: "translateZ(35px)" }}>
         <div className="flex items-center justify-between">
           {/* Floating & Rotating Icon Box */}
-          <motion.div
+          <motion.div 
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.25 }}
             variants={{
@@ -149,14 +233,14 @@ function AchievementCard({ ach, index }: { ach: Achievement; index: number }) {
 
         <div className="flex flex-col gap-0.5 mt-2">
           <AnimatedMetric value={ach.metric} isHovered={isHovered} />
-
+          
           <h3 className="text-xs font-space font-extrabold text-white tracking-wider uppercase mt-1">
             {ach.title}
           </h3>
         </div>
       </div>
 
-      <p className="text-[11px] font-light text-slate-400 leading-relaxed mt-4 relative z-20">
+      <p className="text-[11px] font-light text-slate-400 leading-relaxed mt-4 relative z-20" style={{ transform: "translateZ(20px)" }}>
         {ach.description}
       </p>
     </motion.div>
@@ -258,26 +342,27 @@ export default function Achievements() {
       <div className="absolute bottom-[20%] right-0 w-[450px] h-[450px] bg-red-950/5 rounded-full blur-[130px] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto flex flex-col gap-12 relative z-10">
-        {/* Header section with staggered fade-in */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col gap-2 items-center text-center"
-        >
+        {/* Header section with staggered characters reveal */}
+        <div className="flex flex-col gap-2 items-center text-center">
           <span className="text-xs font-mono tracking-[0.3em] text-red-500 uppercase">
             Coding Philosophy
           </span>
-          <h2 className="text-3xl md:text-5xl font-bebas tracking-wide">
-            Always Building.
-          </h2>
-          <p className="max-w-md text-slate-400 text-xs md:text-sm font-light mt-2 leading-relaxed">
+          <AnimatedTextReveal
+            text="Always Building."
+            className="text-3xl md:text-5xl font-bebas tracking-wide text-white uppercase"
+          />
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="max-w-md text-slate-400 text-xs md:text-sm font-light mt-2 leading-relaxed"
+          >
             I believe the best way to learn is by building. Every new idea becomes an opportunity to experiment, solve problems, and improve as a developer.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
-        {/* Responsive Grid with four premium cards */}
+        {/* Responsive Grid with four premium 3D cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
           {ACHIEVEMENTS.map((ach, index) => (
             <AchievementCard key={ach.title} ach={ach} index={index} />
@@ -295,7 +380,7 @@ export default function Achievements() {
           <span className="text-[10px] font-mono tracking-[0.4em] text-red-500/80 uppercase">
             Current Mindset
           </span>
-
+          
           <blockquote className="text-lg md:text-xl font-space font-medium text-slate-200 leading-relaxed italic select-none">
             &ldquo;I don&apos;t wait until I know everything. I build, learn, improve, and repeat.&rdquo;
           </blockquote>
