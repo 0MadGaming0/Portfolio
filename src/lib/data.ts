@@ -87,8 +87,8 @@ export const PROJECTS: Project[] = [
     lessons: "Leveraging local state caching structures and highly efficient indexing arrays to coordinate complex client-side calculations and immediate feedback transitions.",
     image: "fitai_dashboard",
     techStack: ["React", "Next.js", "TypeScript", "Tailwind", "Groq API", "Firebase", "MongoDB"],
-    github: "https://github.com/madhav/FitAI",
-    live: "https://fitai-demo.vercel.app",
+    github: "https://github.com/0MadGaming0/FitAI",
+    live: "https://fitai-go.vercel.app/",
     featured: true,
     category: "AI"
   },
@@ -103,7 +103,7 @@ export const PROJECTS: Project[] = [
     lessons: "Understood the details of image compression pipelines, tensor operations, and the importance of fallback logic in medical warning contexts.",
     image: "skin_disease_prediction",
     techStack: ["Python", "Flask", "React", "ResNet18", "HAM10000", "Tailwind"],
-    github: "https://github.com/madhav/Skin-Disease-Detection",
+    github: "https://github.com/0MadGaming0/Skin-Disease-Detection",
     live: "https://skin-disease-demo.vercel.app",
     featured: true,
     category: "AI"
@@ -164,23 +164,23 @@ export const EXPERIENCES: Experience[] = [
 
 export const ACHIEVEMENTS: Achievement[] = [
   {
-    title: "Full-Stack Project Architect",
-    description: "Built multiple full-stack systems with custom databases, authentication, and heavy UI logic.",
-    metric: "12+ Apps"
+    title: "Projects Built",
+    description: "Designed and developed AI-powered and full-stack applications using React, Flask, MongoDB, Python, JavaScript, and modern development tools.",
+    metric: "5+"
   },
   {
-    title: "AI Integrations Expert",
-    description: "Configured neural network inferences and dynamic prompt context management engines.",
-    metric: "Top Tier"
+    title: "Community Impact",
+    description: "Organized workshops, technical sessions, outreach campaigns, hackathons, and community initiatives through IEEE CS SBC SBCE and TinkerHub.",
+    metric: "10+ Events"
   },
   {
-    title: "Hackathon Participant",
-    description: "Designed, coded, and presented functional prototypes under constrained time deadlines.",
-    metric: "3+ events"
+    title: "Continuous Learning",
+    description: "Always exploring new technologies, frameworks, AI tools, and software engineering practices. Every week is an opportunity to learn something new.",
+    metric: "∞"
   },
   {
-    title: "Continuous Learner",
-    description: "Completing professional certifications and adapting to leading industry development frameworks.",
-    metric: "Always"
+    title: "Ideas to Reality",
+    description: "Whenever an interesting idea comes to mind, I prototype it, experiment with it, and transform it into something tangible.",
+    metric: "24/7"
   }
 ];
