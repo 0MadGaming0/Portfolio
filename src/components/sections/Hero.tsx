@@ -200,7 +200,7 @@ export default function Hero() {
 
               <MagneticButton>
                 <a
-                  href="#"
+                  href="/resume"
                   className="cursor-pointer block px-5 py-2.5 rounded-full text-[10px] font-mono tracking-widest border border-slate-700 hover:border-violet-500 bg-[#080808]/40 text-slate-300 hover:text-white transition-all duration-300"
                 >
                   DOWNLOAD RESUME
