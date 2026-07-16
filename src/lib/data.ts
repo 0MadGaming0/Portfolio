@@ -130,7 +130,7 @@ export const EXPERIENCES: Experience[] = [
   {
     role: "IEEE CS SBC SBCE Webmaster",
     company: "IEEE CS SBC SBCE",
-    period: "2025 - Present",
+    period: "2026 - Present",
     description: [
       "Designing, coding, and maintaining the official IEEE Computer Society Student Branch Chapter web portal.",
       "Managing server hosting configurations, domain setups, and accessibility rules to ensure standard-compliant delivery.",
@@ -151,8 +151,8 @@ export const EXPERIENCES: Experience[] = [
   },
   {
     role: "Outreach Lead",
-    company: "IEEE SB SBCE",
-    period: "2024 - 2025",
+    company: "TinkerHub SBCE",
+    period: "2025 - 2026",
     description: [
       "Coordinated cross-campus technology campaigns, bringing in participants for development bootcamps and tech events.",
       "Orchestrated public relations strategies and partnered with campus student chapters to promote IEEE events.",
