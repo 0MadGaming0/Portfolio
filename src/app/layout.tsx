@@ -36,13 +36,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://madhav-portfolio.vercel.app",
+    url: "https://madhavcodes.is-a.dev",
     title: "Madhav | Front-End Developer & UI Engineer",
     description: "Senior-level portfolio of Madhav, a Front-End Developer crafting premium, immersive, AI-powered digital products.",
     siteName: "Madhav Portfolio",
     images: [
       {
-        url: "https://madhav-portfolio.vercel.app/og-image.jpg",
+        url: "https://madhavcodes.is-a.dev/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Madhav Portfolio Preview",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Madhav | Front-End Developer & UI Engineer",
     description: "Senior-level portfolio of Madhav, a Front-End Developer crafting premium, immersive, AI-powered digital products.",
-    images: ["https://madhav-portfolio.vercel.app/og-image.jpg"],
+    images: ["https://madhavcodes.is-a.dev/og-image.jpg"],
     creator: "@madhav_dev",
   },
   robots: {

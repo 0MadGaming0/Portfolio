@@ -30,7 +30,7 @@ export default function ResumePage() {
     email: "madhavsp05@gmail.com",
     linkedin: "https://www.linkedin.com/in/madhav-s-pillai",
     github: "https://github.com/0MadGaming0",
-    portfolio: "https://fitai-go.vercel.app/",
+    portfolio: "https://madhavcodes.is-a.dev/",
     summary: "Passionate Software Developer specializing in front-end and full-stack web development. Experienced with React, JavaScript, Python, Flask, MongoDB, HTML, CSS, Git, and REST APIs, with a strong interest in building scalable, user-centric web applications and continuously learning modern technologies.",
     skills: {
       languages: ["JavaScript", "Python", "HTML5", "CSS3"],
