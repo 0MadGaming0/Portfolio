@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { PERSONAL_INFO, STATS, EXPERIENCES } from "@/lib/data";
@@ -44,6 +44,31 @@ export default function About() {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.1 });
 
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left - width / 2;
+    const mouseY = e.clientY - rect.top - height / 2;
+    // Calculate rotation angles (max 15 degrees)
+    const rX = -(mouseY / height) * 15;
+    const rY = (mouseX / width) * 15;
+    setTilt({ x: rX, y: rY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
     <section
       id="about"
@@ -65,29 +90,103 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="lg:col-span-5 flex justify-center"
           >
-            <div className="relative group w-72 h-96 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden shadow-2xl">
+            <div
+              className="relative group w-72 h-96 sm:w-80 sm:h-[420px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 ease-out cursor-none"
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              style={{
+                perspective: 1000,
+                transformStyle: "preserve-3d",
+                transform: isHovered 
+                  ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1.02, 1.02, 1.02)` 
+                  : `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`,
+              }}
+            >
               {/* Animated glowing borders */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-violet-600 rounded-3xl blur opacity-30 group-hover:opacity-70 transition duration-1000 group-hover:duration-200" />
+              <div 
+                className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-violet-600 rounded-3xl blur opacity-30 group-hover:opacity-75 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  transform: isHovered ? "translateZ(-15px)" : "translateZ(0)",
+                }}
+              />
               
-              <div className="relative w-full h-full bg-[#070a1e] rounded-3xl overflow-hidden border border-violet-500/20">
-                <Image
-                  src={PERSONAL_INFO.avatar}
-                  alt="Madhav avatar image"
-                  fill
-                  sizes="(max-w-768px) 100vw, 350px"
-                  priority
-                  unoptimized
-                  className="object-cover object-[center_60%] transition-transform duration-700 group-hover:scale-105"
+              <div 
+                className="relative w-full h-full bg-[#070a1e] rounded-3xl overflow-hidden border border-violet-500/20"
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                {/* Tech digital grid overlay */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 group-hover:opacity-50 transition-opacity duration-500 pointer-events-none z-10" />
+
+                {/* Cyberpunk scanning line */}
+                <div className="absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 animate-scan pointer-events-none shadow-[0_0_8px_rgba(239,68,68,0.8)] z-20" />
+
+                {/* Corner focus brackets */}
+                <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 border-cyan-500/35 pointer-events-none group-hover:border-cyan-500/80 transition-colors duration-500 z-20" />
+                <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 border-cyan-500/35 pointer-events-none group-hover:border-cyan-500/80 transition-colors duration-500 z-20" />
+                <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 border-cyan-500/35 pointer-events-none group-hover:border-cyan-500/80 transition-colors duration-500 z-20" />
+                <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 border-cyan-500/35 pointer-events-none group-hover:border-cyan-500/80 transition-colors duration-500 z-20" />
+
+                {/* Tech subtext / coordinates */}
+                <div 
+                  className="absolute top-5 left-5 flex flex-col gap-0.5 font-mono text-[7px] text-cyan-400/50 select-none tracking-[0.15em] leading-none z-20 transition-all duration-300 group-hover:text-cyan-400/80"
+                  style={{ transform: "translateZ(20px)" }}
+                >
+                  <span>SYS.LOC // 9.93° N</span>
+                  <span>STATUS // ACTIVE</span>
+                </div>
+                <div 
+                  className="absolute top-5 right-5 flex flex-col gap-0.5 font-mono text-[7px] text-right text-violet-400/50 select-none tracking-[0.15em] leading-none z-20 transition-all duration-300 group-hover:text-violet-400/80"
+                  style={{ transform: "translateZ(20px)" }}
+                >
+                  <span>HOST_ID // 0MGDG0</span>
+                  <span>PORT // 3000</span>
+                </div>
+
+                {/* Holographic light sheen reflection */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-20"
+                  style={{
+                    transform: `translate(${tilt.y * 1.2}px, ${-tilt.x * 1.2}px) translateZ(10px)`,
+                  }}
                 />
+
+                {/* Image Container with depth */}
+                <div 
+                  className="relative w-full h-full"
+                  style={{
+                    transform: isHovered ? "translateZ(-8px) scale(1.03)" : "translateZ(0px) scale(1)",
+                    transition: "transform 0.5s ease-out"
+                  }}
+                >
+                  <Image
+                    src={PERSONAL_INFO.avatar}
+                    alt="Madhav avatar image"
+                    fill
+                    sizes="(max-w-768px) 100vw, 350px"
+                    priority
+                    unoptimized
+                    className="object-cover object-[center_60%] transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
                 
                 {/* Floating design elements */}
-                <div className="absolute bottom-4 left-4 right-4 glass-panel px-4 py-3 rounded-2xl flex items-center justify-between border border-white/5">
+                <div 
+                  className="absolute bottom-4 left-4 right-4 glass-panel px-4 py-3 rounded-2xl flex items-center justify-between border border-white/5 transition-all duration-500 group-hover:border-cyan-500/35 group-hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] z-30"
+                  style={{
+                    transform: isHovered ? "translateZ(30px)" : "translateZ(0px)",
+                    transition: "transform 0.3s ease-out, border-color 0.5s, box-shadow 0.5s",
+                  }}
+                >
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-mono text-cyan-400">DESIGNATION</span>
-                    <span className="text-xs font-semibold text-white font-space">Front-End Developer</span>
+                    <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1 font-bold">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                      DESIGNATION
+                    </span>
+                    <span className="text-xs font-semibold text-white font-space mt-0.5">Front-End Developer</span>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-violet-600/30 flex items-center justify-center border border-violet-500/20">
-                    <Code size={14} className="text-violet-400" />
+                  <div className="w-8 h-8 rounded-full bg-violet-600/30 hover:bg-violet-600/60 flex items-center justify-center border border-violet-500/20 transition-all duration-300">
+                    <Code size={13} className="text-violet-400 group-hover:text-white transition-colors duration-300" />
                   </div>
                 </div>
               </div>
