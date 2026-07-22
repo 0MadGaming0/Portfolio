@@ -54,7 +54,7 @@ export const PERSONAL_INFO = {
 export const STATS = [
   { label: "Projects Completed", value: 12, suffix: "+" },
   { label: "Technologies", value: 14, suffix: "" },
-  { label: "GitHub Contributions", value: 500, suffix: "+" },
+  { label: "GitHub Contributions", value: 200, suffix: "+" },
   { label: "Certificates Earned", value: 5, suffix: "+" },
 ];
 
