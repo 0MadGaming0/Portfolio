@@ -215,7 +215,7 @@ export const EXPERIENCES: Experience[] = [
   },
   {
     role: "Outreach Lead",
-    company: "TinkerHub SBCE",
+    company: "TinkerHub  SBCE",
     period: "2025 - 2026",
     description: [
       "Coordinated cross-campus technology campaigns, bringing in participants for development bootcamps and tech events.",

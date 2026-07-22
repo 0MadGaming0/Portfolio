@@ -21,7 +21,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <>
           <CustomCursor />
           {!isResumePage && <Navbar />}
-          <HangingLightBulb />
+          {!isResumePage && <HangingLightBulb />}
           {children}
           {/* Global Noise Overlay for premium tactile feel */}
           <div className="noise-bg" />
