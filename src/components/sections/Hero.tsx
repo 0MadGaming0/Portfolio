@@ -224,7 +224,7 @@ export default function Hero() {
               {[
                 { value: "3+", label: "Years Experience" },
                 { value: "12+", label: "Projects Completed" },
-                { value: "500+", label: "GitHub Commits" },
+                { value: "200+", label: "GitHub Commits" },
               ].map((s, idx) => (
                 <div 
                   key={s.label} 
