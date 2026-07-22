@@ -18,10 +18,19 @@ export default function HangingLightBulb() {
   return (
     <div className="fixed top-0 right-6 sm:right-16 md:right-24 z-[60] select-none pointer-events-auto">
       <motion.div
-        className="flex flex-col items-center cursor-pointer group"
+        className="flex flex-col items-center cursor-pointer group origin-top"
         onClick={handleClick}
-        animate={isPulling ? { y: [0, 18, -4, 0] } : { y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        style={{ transformOrigin: "top center" }}
+        animate={
+          isPulling
+            ? { y: [0, 22, -4, 0], rotate: [0, -12, 10, -5, 0] }
+            : { rotate: [-3, 3, -3] }
+        }
+        transition={
+          isPulling
+            ? { duration: 0.5, ease: "easeOut" }
+            : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+        }
         whileHover={{ scale: 1.05 }}
       >
         {/* Hanging Wire Cord */}
@@ -59,14 +68,14 @@ export default function HangingLightBulb() {
             </>
           )}
 
-          {/* Bulb SVG Icon */}
+          {/* Bulb SVG Icon (Flipped 180deg so socket cap connects to cord and glass bulb faces downwards) */}
           <svg
             width="32"
             height="42"
             viewBox="0 0 32 42"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className={`transition-all duration-500 ${
+            className={`rotate-180 transition-all duration-500 ${
               isLight
                 ? "drop-shadow-[0_0_18px_rgba(251,191,36,0.95)] drop-shadow-[0_0_35px_rgba(245,158,11,0.6)]"
                 : "drop-shadow-[0_0_6px_rgba(255,255,255,0.15)] group-hover:drop-shadow-[0_0_12px_rgba(251,191,36,0.5)]"

@@ -266,4 +266,15 @@ html.light ::-webkit-scrollbar-thumb {
 
 html.light ::-webkit-scrollbar-thumb:hover {
   background: #dc2626;
-}
+}
+
+/* Light Mode Hero Gradient & Overlay Shadow Fixes */
+html.light .hero-fade-overlay,
+html.light .hero-bottom-fade {
+  background: linear-gradient(to top, #f8fafc 0%, rgba(248, 250, 252, 0.4) 50%, transparent 100%) !important;
+}
+
+html.light .particle-bg-container {
+  background-color: #f8fafc !important;
+}
+

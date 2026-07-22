@@ -124,7 +124,7 @@ export default function Hero() {
         >
           {/* Glow halo behind photo */}
           <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-violet-600/30 via-violet-600/10 to-transparent blur-3xl rounded-full" />
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#080808] via-transparent to-transparent z-20" />
+          <div className="hero-fade-overlay absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#080808] via-transparent to-transparent z-20" />
 
           <Image
             src={PERSONAL_INFO.avatar}
@@ -138,7 +138,7 @@ export default function Hero() {
       </motion.div>
 
       {/* ─── BOTTOM FADE ─── */}
-      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#080808] to-transparent z-20 pointer-events-none" />
+      <div className="hero-bottom-fade absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#080808] to-transparent z-20 pointer-events-none" />
 
       {/* ─── CONTENT OVERLAY ─── */}
       <motion.div

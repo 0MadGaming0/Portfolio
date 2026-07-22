@@ -73,7 +73,7 @@ export default function ParticleBackground() {
   }
 
   return (
-    <div className="absolute inset-0 h-full w-full -z-10 bg-[#080808] overflow-hidden">
+    <div className="particle-bg-container absolute inset-0 h-full w-full -z-10 bg-[#080808] overflow-hidden">
       {/* Mesh Gradient backdrop */}
       <div className="absolute inset-0 bg-radial-gradient from-violet-950/20 via-transparent to-transparent opacity-60 pointer-events-none" />
       
