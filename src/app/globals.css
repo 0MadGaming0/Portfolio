@@ -277,4 +277,43 @@ html.light .hero-bottom-fade {
 html.light .particle-bg-container {
   background-color: #f8fafc !important;
 }
+
+/* Light Mode Dark Element Overrides for Skill Cards, Badges, Tech Tags & Icons */
+html.light .bg-slate-800,
+html.light .bg-slate-800\/80,
+html.light .bg-slate-800\/60,
+html.light .bg-slate-900,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-950,
+html.light .bg-slate-950\/30,
+html.light .bg-slate-950\/40,
+html.light .bg-\[\#070a1e\],
+html.light .bg-\[\#070a1e\]\/30,
+html.light .bg-\[\#09090b\]\/80,
+html.light .bg-\[\#09090b\]\/90 {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+  color: #1e293b !important;
+}
+
+html.light .border-slate-800,
+html.light .border-slate-800\/40,
+html.light .border-slate-800\/50,
+html.light .border-slate-800\/60,
+html.light .border-slate-700,
+html.light .border-slate-700\/40,
+html.light .border-slate-700\/50 {
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+html.light .text-slate-300,
+html.light .text-slate-400 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-500 {
+  color: #64748b !important;
+}
+
 
