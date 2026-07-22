@@ -235,7 +235,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     title: "Community Impact",
     description: "Organized workshops, technical sessions, outreach campaigns, hackathons, and community initiatives through IEEE CS SBC SBCE and TinkerHub.",
-    metric: "10+ Events"
+    metric: "50+ Events"
   },
   {
     title: "Continuous Learning",
